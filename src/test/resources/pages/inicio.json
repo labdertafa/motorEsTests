@@ -1,0 +1,23 @@
+{
+	"tituloBusqueda": {
+		"GetFieldBy": "className",
+		"ValueToFind": "buscador-coches__titulo"
+	},
+	"aceptar_cookies": {
+		"GetFieldBy": "id",
+		"ValueToFind": "btn-gdpr-accept"
+	},
+	"menuFormula1": {
+		"GetFieldBy": "id",
+		"ValueToFind": "formula_1"
+	},
+	"menuLateral": {
+		"GetFieldBy": "id",
+		"ValueToFind": "expand_menu_btn"
+	}
+	,
+	"f1Lateral": {
+		"GetFieldBy": "partialLinkText",
+		"ValueToFind": "Fórmula 1"
+	}
+}

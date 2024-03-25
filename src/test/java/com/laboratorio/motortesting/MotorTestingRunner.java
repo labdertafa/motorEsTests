@@ -34,4 +34,9 @@ public class MotorTestingRunner {
 	public static void tearDownTests() {
 		logger.log(Level.INFO, "Ejecutando tearDownTests()");
 	}
+	
+	@org.junit.Test
+	public void Test() {
+		logger.log(Level.INFO, "Un ridículo tests");
+	}
 }

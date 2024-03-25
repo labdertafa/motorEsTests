@@ -15,10 +15,9 @@ import io.cucumber.junit.CucumberOptions;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(
-		features = "src/test/resources/features",
-		glue = "com.laboratorio.stepdefinitions",
 		dryRun = false,
-		monochrome = true,
+		features = "src/test/resources/features",
+		glue = {"com.laboratorio.stepdefinitions"},
 		plugin = {"pretty", "summary", "com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:"},
 		snippets = SnippetType.CAMELCASE
 		

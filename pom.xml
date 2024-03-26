@@ -8,7 +8,7 @@
 	<groupId>com.laboratorio</groupId>
 	<artifactId>motortesting</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	
+
 	<name>MotorEsTesting</name>
 
 	<properties>
@@ -16,20 +16,6 @@
 	</properties>
 
 	<dependencies>
-		<dependency>
-			<groupId>io.cucumber</groupId>
-			<artifactId>cucumber-java</artifactId>
-			<version>7.15.0</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>io.cucumber</groupId>
-			<artifactId>cucumber-junit</artifactId>
-			<version>7.15.0</version>
-			<scope>test</scope>
-		</dependency>
-
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -40,7 +26,23 @@
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
-			<version>4.18.1</version>
+			<version>4.16.1</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- Dependencia JUNIT para cucumber: reemplaza el groupId info.cukes -->
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-junit</artifactId>
+			<version>7.15.0</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-java</artifactId>
+			<version>7.15.0</version>
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>
@@ -80,5 +82,27 @@
 			<version>5.2.5</version>
 		</dependency>
 	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.12.1</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.2.5</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.maven.surefire</groupId>
+						<artifactId>surefire-junit47</artifactId>
+						<version>3.2.5</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+		</plugins>
+	</build>
 
 </project>

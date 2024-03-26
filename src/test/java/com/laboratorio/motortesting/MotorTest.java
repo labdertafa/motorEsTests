@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.laboratorio.utils.LogHelper;
@@ -22,8 +23,8 @@ import io.cucumber.junit.CucumberOptions;
 		snippets = SnippetType.CAMELCASE
 		
 )
-public class MotorTestingRunner {
-	private static final Logger logger = LogHelper.getLogger(MotorTestingRunner.class);
+public class MotorTest {
+	private static final Logger logger = LogHelper.getLogger(MotorTest.class);
 	
 	@BeforeClass
 	public static void setUpTests() {
@@ -35,8 +36,8 @@ public class MotorTestingRunner {
 		logger.log(Level.INFO, "Ejecutando tearDownTests()");
 	}
 	
-	@org.junit.Test
-	public void Test() {
-		logger.log(Level.INFO, "Un ridículo tests");
+	@Test
+	public void test() {
+		logger.log(Level.INFO, "Ejecutando test()");
 	}
 }

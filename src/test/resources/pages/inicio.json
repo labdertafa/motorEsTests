@@ -11,13 +11,21 @@
 		"GetFieldBy": "id",
 		"ValueToFind": "formula_1"
 	},
+	"menuKm0": {
+		"GetFieldBy": "id",
+		"ValueToFind": "coches_km_0"
+	},
 	"menuLateral": {
 		"GetFieldBy": "id",
 		"ValueToFind": "expand_menu_btn"
-	}
-	,
+	},
 	"f1Lateral": {
 		"GetFieldBy": "partialLinkText",
 		"ValueToFind": "Fórmula 1"
+	}
+	,
+	"km0Lateral": {
+		"GetFieldBy": "partialLinkText",
+		"ValueToFind": "Coches Km 0"
 	}
 }

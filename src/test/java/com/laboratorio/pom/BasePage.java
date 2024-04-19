@@ -1,73 +1,35 @@
 package com.laboratorio.pom;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.time.Duration;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.laboratorio.stepdefinitions.Hooks;
 import com.laboratorio.utils.LogHelper;
 
 public class BasePage {
 	private static final Logger logger = LogHelper.getLogger(BasePage.class);
 	private WebDriver driver;
-	private String filename;
 
-	public BasePage(WebDriver driver, String filename) {
+	public BasePage() {
+	}
+
+	public void setDriver(WebDriver driver) {
 		this.driver = driver;
-		this.filename = filename;
 	}
 
-	private Object readJson() throws Exception {
-		FileReader reader = null;
-		String pagesFilePath = Hooks.rutaDefinicionPaginas() + this.filename;
-
-		try {
-			reader = new FileReader(pagesFilePath);
-
-			if (reader != null) {
-				logger.log(Level.INFO, "Definición de la página recuperada: " + this.filename);
-				JSONParser jsonParser = new JSONParser();
-				return jsonParser.parse(reader);
-			}
-
-			return null;
-		} catch (FileNotFoundException | NullPointerException e) {
-			logger.log(Level.SEVERE, "No he podido recuperar la definición de la página: " + pagesFilePath);
-			throw e;
-		} finally {
-			if (reader != null) {
-				reader.close();
-			}
-		}
-	}
-
-	private JSONObject readEntity(String element) throws Exception {
-		JSONObject entity = null;
-
-		JSONObject jsonObject = (JSONObject) this.readJson();
-		logger.log(Level.INFO, "Definición recuperada: " + jsonObject.toJSONString());
-		entity = (JSONObject) jsonObject.get(element);
-		return entity;
-	}
-
-	private By getCompleteElement(String element) throws Exception {
+	private By getElement(JSONObject entity) throws Exception {
 		By result = null;
-		JSONObject entity = this.readEntity(element);
-
 		String getFieldBy = (String) entity.get("GetFieldBy");
-		logger.log(Level.INFO, "Valor recuperado de getFieldBy: " + getFieldBy);
 		String valueToFind = (String) entity.get("ValueToFind");
-		logger.log(Level.INFO, "Valor recuperado de valueToFind: " + valueToFind);
 
 		switch (getFieldBy) {
 		case "className":
@@ -95,102 +57,146 @@ public class BasePage {
 			result = By.xpath(valueToFind);
 			break;
 		}
-		
-		logger.log(Level.INFO, "Valor del Locator encontrado: " + result.toString());
+
+		logger.log(Level.INFO, String.format("Le localisateur %s a été trouvé!", entity.toString()));
 
 		return result;
 	}
 
-	// Encontrar un elemento por nombre
-	protected WebElement findElement(String elemento) throws Exception {
-		By locator;
-
+	// // Rechercher un composant Web à partir d nom
+	private WebElement findElement(JSONObject entity) throws Exception {
 		try {
-			locator = this.getCompleteElement(elemento);
-			if (locator == null) {
-				throw new Exception("No se pudo encontrar el elemento: " + elemento);
-			}
-			
-			WebElement element = driver.findElement(locator);
-			logger.log(Level.INFO, "Valor del elemento encontrado: " + element.toString());
-			
-			return element;
+			By locator = this.getElement(entity);
+
+			// Attendre la présence de l'élément
+			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+			wait.until(ExpectedConditions.presenceOfElementLocated(locator));
+
+			return driver.findElement(locator);
 		} catch (Exception e) {
-			logger.log(Level.SEVERE, "Error: " + e.getMessage());
-			throw new Exception("No se pudo encontrar el elemento: " + elemento);
+			logger.log(Level.SEVERE, "Erreur: " + e.getMessage());
+			throw new Exception(
+					String.format("Le composant Web %s est introuvable avec le localisateur : ", entity.toString()));
 		}
 	}
 
-	// Hacer click en un elemento por su nombre
-	protected void click(String elemento) throws Exception {
+	// Cliquer sur un élément Web
+	public void click(JSONObject element) throws Exception {
 		try {
-			WebElement element = this.findElement(elemento);
-			element.click();
+			WebElement webElement = this.findElement(element);
+			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+			wait.until(ExpectedConditions.elementToBeClickable(webElement));
+			webElement.click();
 		} catch (Exception e) {
-			logger.log(Level.SEVERE, "Error: " + e.getMessage());
-			throw new Exception("No se pudo hacer click sobre el elemento: " + elemento);
+			logger.log(Level.SEVERE, "Erreur: " + e.getMessage());
+			throw new Exception("Impossible de cliquer sur l'élément : " + element);
 		}
 	}
 
-	// Verificar si un elemento está desplegado
-	protected boolean isDisplayed(String elemento) throws Exception {
+	// Vérifier si un élément s'affiche
+	public boolean isDisplayed(JSONObject element) throws Exception {
 		try {
-			WebElement element = this.findElement(elemento);
-			return element.isDisplayed();
+			return this.findElement(element).isDisplayed();
 		} catch (Exception e) {
-			logger.log(Level.SEVERE, "Error: " + e.getMessage());
-			throw new Exception("No se pudo encontrar el elemento: " + elemento);
+			logger.log(Level.SEVERE, "Erreur: " + e.getMessage());
+			throw new Exception("Pas d'affichage de l'élément : " + element);
 		}
 	}
 
-	// Recuperar el texto de un elemento
-	protected String getText(String elemento) throws Exception {
+	// Récupérer le texte d'un élément
+	public String getText(JSONObject element) throws Exception {
 		try {
-			WebElement element = this.findElement(elemento);
-			return element.getText();
+			return this.findElement(element).getText();
 		} catch (Exception e) {
-			logger.log(Level.SEVERE, "Error: " + e.getMessage());
-			throw new Exception("No se pudo obtener el texto del elemento: " + elemento);
+			logger.log(Level.SEVERE, "Erreur: " + e.getMessage());
+			throw new Exception("Impossible d'obtenir le texte de l'élément : " + element);
 		}
 	}
 
-	// Agregar texto a un elemento
-	protected void typeText(String elemento, String text) throws Exception {
+	// Ajouter du texte à un élément
+	public void typeText(JSONObject element, String text) throws Exception {
 		try {
-			WebElement element = this.findElement(elemento);
-			element.sendKeys(text);
+			this.findElement(element).sendKeys(text);
 		} catch (Exception e) {
-			logger.log(Level.SEVERE, "Error: " + e.getMessage());
-			throw new Exception("No se pudo escribir el texto en el elemento: " + elemento);
+			logger.log(Level.SEVERE, "Erreur: " + e.getMessage());
+			throw new Exception("Impossible d'écrire du texte dans l'élément : " + element);
 		}
 	}
 
-	// Esperar a que aparezca un elemento del DOM
-	protected void waitForElement(String elemento) throws Exception {
+	// Attendre la présence d'un élément
+	public void waitForElement(JSONObject element) throws Exception {
 		try {
-			logger.log(Level.INFO, "Iniciando la espera por el elemento: " + elemento);
-			By locator = this.getCompleteElement(elemento);
-			if (locator != null) {
-				logger.log(Level.INFO, "He encontrado el localizador del elemento: " + elemento);
-			} else {
-				logger.log(Level.WARNING, "No ha localizador, lanzado excepción");
-				throw new Exception("No se encontró el localizador del elemento: " + elemento);
-			}
-			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+			By locator = this.getElement(element);
+			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 			wait.until(ExpectedConditions.presenceOfElementLocated(locator));
 		} catch (Exception e) {
-			logger.log(Level.SEVERE, "Error: " + e.getMessage());
-			throw new Exception("No se pudo ejecutar la espera por el elemento: " + elemento);
+			logger.log(Level.SEVERE, "Erreur: " + e.getMessage());
+			throw new Exception("Le délai d'attente est terminé pour l'élément : " + element);
 		}
 	}
 
-	// Obtener el título de la ventana del navegador
-	protected String getTitle() throws Exception {
+	// Attendre la présence d'un text dans un élément
+	public void waitForTextInElement(JSONObject element, String elementText) throws Exception {
+		try {
+			WebElement webElement = this.findElement(element);
+			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+			wait.until(ExpectedConditions.textToBePresentInElement(webElement, elementText));
+		} catch (Exception e) {
+			logger.log(Level.SEVERE, "Erreur: " + e.getMessage());
+			throw new Exception("Le délai de localisation a expiré pour l'élément : " + element);
+		}
+	}
+
+	// Récupère le titre de la fenêtre du navigateur
+	public String getTitle() throws Exception {
 		try {
 			return driver.getTitle();
 		} catch (Exception e) {
+			logger.log(Level.SEVERE, "Erreur: " + e.getMessage());
+			throw new Exception("Impossible d'obtenir le titre de la page à partir du navigateur");
+		}
+	}
+
+	// Accéder à la page définie par le paramètre URL
+	public void navigate(String url) throws Exception {
+		try {
+			driver.get(url);
+		} catch (Exception e) {
+			logger.log(Level.SEVERE, "Erreur: " + e.getMessage());
+			throw new Exception("Impossible d'ouvrir la page : " + url);
+		}
+	}
+
+	// Seleccionar elemento en combo
+	protected void seleccionarEnCombo(JSONObject element, String valor) throws Exception {
+		try {
+			WebElement webElement = this.findElement(element);
+			Select select = new Select(webElement);
+			select.selectByValue(valor);
+		} catch (Exception e) {
 			logger.log(Level.SEVERE, "Error: " + e.getMessage());
-			throw new Exception("No se pudo obtener el título de la página del navegador");
+			throw new Exception("Combo: No se pudo seleccionar el elemento con valor: " + valor);
+		}
+	}
+
+	// Seleccionar elemento en lista
+	protected boolean clickEnElementoDeLista(JSONObject elemento, String valor) throws Exception {
+		try {
+			WebElement lista = findElement(elemento);
+			List<WebElement> elements = lista.findElements(By.tagName("li"));
+			for (WebElement elem : elements) {
+				if (elem.getText().equals(valor)) {
+					WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+					wait.until(ExpectedConditions.elementToBeClickable(elem));
+					elem.click();
+					return true;
+				}
+			}
+
+			return false;
+		} catch (Exception e) {
+			logger.log(Level.SEVERE, "Error: " + e.getMessage());
+			throw new Exception("Lista: No se pudo seleccionar el elemento con valor: " + valor);
 		}
 	}
 }

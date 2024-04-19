@@ -24,6 +24,10 @@ public class DriverManagerFactory {
 				driverManager = new EdgeDriverManager();
 				logger.log(Level.INFO, "Se ha seleccionado el EdgeDriver existosamente");
 				break;
+			case MOVIL:
+				driverManager = new MovilDriverManager();
+				logger.log(Level.INFO, "Se ha seleccionado el MovilDriver existosamente");
+				break;
 			default:
 				logger.log(Level.SEVERE, "Se ha seleccionado un browser inválido!");
 				break;

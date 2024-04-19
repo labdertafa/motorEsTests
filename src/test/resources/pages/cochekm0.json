@@ -2,5 +2,25 @@
 	"titulo": {
 		"GetFieldBy": "className",
 		"ValueToFind": "js-actual-search-info"
+	},
+	"BotonFiltrar": {
+		"GetFieldBy": "xpath",
+		"ValueToFind": "//*[@id=\"encabezado_pagina\"]/span[2]/div/div/a[1]/span[2]"
+	},
+	"SelectorMarca": {
+		"GetFieldBy": "id",
+		"ValueToFind": "select2-selMarca-container"
+	},
+	"ListaMarcas": {
+		"GetFieldBy": "id",
+		"ValueToFind": "select2-selMarca-results"
+	},
+	"SelectorModelo": {
+		"GetFieldBy": "id",
+		"ValueToFind": "select2-selModelo-container"
+	},
+	"ListaModelos": {
+		"GetFieldBy": "id",
+		"ValueToFind": "select2-selModelo-results"
 	}
 }

@@ -1,14 +1,6 @@
 package com.laboratorio.motortesting;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import com.laboratorio.utils.LogHelper;
 
 import io.cucumber.junit.CucumberOptions.SnippetType;
 import io.cucumber.junit.Cucumber;
@@ -20,24 +12,8 @@ import io.cucumber.junit.CucumberOptions;
 		features = "src/test/resources/features",
 		glue = {"com.laboratorio.stepdefinitions"},
 		plugin = {"pretty", "summary", "com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:"},
-		snippets = SnippetType.CAMELCASE
-		
+		snippets = SnippetType.CAMELCASE,
+		tags = "@smoketest"
 )
 public class MotorTest {
-	private static final Logger logger = LogHelper.getLogger(MotorTest.class);
-	
-	@BeforeClass
-	public static void setUpTests() {
-		logger.log(Level.INFO, "Ejecutando setUpTests()");
-	}
-	
-	@AfterClass
-	public static void tearDownTests() {
-		logger.log(Level.INFO, "Ejecutando tearDownTests()");
-	}
-	
-	@Test
-	public void test() {
-		logger.log(Level.INFO, "Ejecutando test()");
-	}
 }

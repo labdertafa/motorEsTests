@@ -1,7 +1,6 @@
 package com.laboratorio.stepdefinitions;
 
 import java.io.FileReader;
-import java.io.InputStream;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,7 +15,9 @@ import com.laboratorio.browsers.DriverType;
 import com.laboratorio.utils.LogHelper;
 
 import io.cucumber.java.After;
+import io.cucumber.java.AfterAll;
 import io.cucumber.java.Before;
+import io.cucumber.java.BeforeAll;
 import io.cucumber.java.Scenario;
 
 public class Hooks {
@@ -25,8 +26,28 @@ public class Hooks {
 	private static Properties properties;
 	private DriverManager driverManager;
 	private static WebDriver driver;
+	private static boolean apliMovil;
 	
-	public Hooks() {
+	public static WebDriver getDriver() {
+		return driver;
+	}
+	
+	public static boolean isApliMovil() {
+		return apliMovil;
+	}
+	
+	public static String rutaDefinicionPaginas() {
+		if (properties == null) {
+			return null;
+		}
+		
+		return properties.getProperty("dir_definicion_paginas");
+	}
+	
+	@BeforeAll
+	public static void setUpTests() {
+		logger.log(Level.INFO, "Ejecutando setUpTests()");
+		
 		numEscenario = 0;
 		driver = null;
 		
@@ -42,16 +63,9 @@ public class Hooks {
 		}
 	}
 	
-	public static WebDriver getDriver() {
-		return driver;
-	}
-	
-	public static String rutaDefinicionPaginas() {
-		if (properties == null) {
-			return null;
-		}
-		
-		return properties.getProperty("dir_definicion_paginas");
+	@AfterAll
+	public static void tearDownTests() {
+		logger.log(Level.INFO, "Ejecutando tearDownTests()");
 	}
 
 	@Before
@@ -69,6 +83,10 @@ public class Hooks {
 		// Leer la configuración: URL, usuarios, navegador, propiedad, ruta
 		String pagina = properties.getProperty("pagina");
 		String navegador = properties.getProperty("navegador");
+		apliMovil = false;
+		if (navegador.equals("MOVIL")) {
+			apliMovil = true;
+		}
 		String propiedad =  properties.getProperty("propiedad");
 		String rutaDriver = properties.getProperty("ruta_driver");
 		

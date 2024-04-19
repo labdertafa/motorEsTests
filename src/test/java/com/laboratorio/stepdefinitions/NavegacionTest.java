@@ -70,11 +70,36 @@ public class NavegacionTest extends TestBase {
 	}
 
 /* *****************************************************************
-   Pasos asociados a navegar a la página Km 0 con menú principal
+   Pasos asociados a navegar a la página Km 0 con menú lateral
    ***************************************************************** */
 	@When("el usuario hace click en la opcion coche Km0 del menu lateral")
 	public void el_usuario_hace_click_en_la_opcion_coche_km0_del_menu_lateral() throws Exception {
 		logger.log(Level.INFO, "El usuario hace click en la opcion Coches Km 0 del menú lateral");
 		inicioPage.clickMenuKm0Lateral();
+	}
+
+/* *****************************************************************
+	Pasos asociados a navegar a la página de noticias con menú principal
+   ***************************************************************** */
+	@When("el usuario hace click en la opcion Noticias del menu")
+	public void el_usuario_hace_click_en_la_opcion_noticias_del_menu() throws Exception {
+		logger.log(Level.INFO, "El usuario hace click en la opción Noticias del menú");
+		inicioPage.aceptarCookies();
+		inicioPage.clickMenuNoticias();
+	}
+
+	@Then("se muestra la pagina de Noticias")
+	public void se_muestra_la_pagina_de_noticias() throws Exception {
+		logger.log(Level.INFO, "Se muestra la página de noticias");
+		Assert.assertTrue(noticiasPage.isDisplayed());
+	}
+
+/* *****************************************************************
+	Pasos asociados a navegar a la página de noticias con menú lateral
+   ***************************************************************** */
+	@When("el usuario hace click en la opcion Noticias del menu lateral")
+	public void el_usuario_hace_click_en_la_opcion_noticias_del_menu_lateral() throws Exception {
+		logger.log(Level.INFO, "El usuario hace click en la opcion Noticias del menú lateral");
+		inicioPage.clickMenuNoticiasLateral();
 	}
 }

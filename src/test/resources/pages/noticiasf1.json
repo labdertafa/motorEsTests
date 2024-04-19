@@ -1,6 +1,6 @@
 {
-	"titulo": {
+	"Titulo": {
 		"GetFieldBy": "className",
 		"ValueToFind": "titulo-pagina"
-	},
+	}
 }

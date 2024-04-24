@@ -24,7 +24,7 @@ public class BusquedeKm0Test extends TestBase {
 	@Given("que el usuario esta en la pagina de busqueda de coches Km0")
 	public void queElUsuarioEstaEnLaPaginaDeBusquedaDeCochesKm0() throws Exception {
 		logger.log(Level.INFO, "Situarse en la página de búsqueda de coches Km 0");
-	    irALaPaginaBusquedaKm0();
+	    this.irALaPaginaBusquedaKm0();
 	    Assert.assertTrue(cocheKm0Page.isDisplayed());
 	}
 

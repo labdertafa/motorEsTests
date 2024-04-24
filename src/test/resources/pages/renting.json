@@ -1,0 +1,66 @@
+{
+	"Titulo": {
+		"GetFieldBy": "className",
+		"ValueToFind": "titulo-pagina"
+	},
+	"TipoCompacto": {
+		"GetFieldBy": "id",
+		"ValueToFind": "berlina con portón"
+	},
+	"TipoSedan": {
+		"GetFieldBy": "id",
+		"ValueToFind": "sedán"
+	},
+	"TipoFamiliar": {
+		"GetFieldBy": "id",
+		"ValueToFind": "familiar"
+	},
+	"TipoMonovolumen": {
+		"GetFieldBy": "id",
+		"ValueToFind": "monovolumen"
+	},
+	"TipoSuv": {
+		"GetFieldBy": "id",
+		"ValueToFind": "todoterreno"
+	},
+	"TipoDeportivo": {
+		"GetFieldBy": "id",
+		"ValueToFind": "coupé"
+	},
+	"TipoCabrio": {
+		"GetFieldBy": "id",
+		"ValueToFind": "cabrio"
+	},
+	"EscogerOpcion": {
+		"GetFieldBy": "className",
+		"ValueToFind": "boton-configurador primario next"
+	},
+	"SlideCouta": {
+		"GetFieldBy": "id",
+		"ValueToFind": "cuotaRange"
+	},
+	"SlideMeses": {
+		"GetFieldBy": "id",
+		"ValueToFind": "mesesRange"
+	},
+	"SlideKilometros": {
+		"GetFieldBy": "id",
+		"ValueToFind": "kmsRange"
+	},
+	"VerOfertas": {
+		"GetFieldBy": "xpath",
+		"ValueToFind": "/html/body/div[4]/div/main/span[2]/span/span/div/form[2]/button"
+	},
+	"VerOfertasMovil": {
+		"GetFieldBy": "xpath",
+		"ValueToFind": "/html/body/main/span[2]/span/span/div/form[2]/button"
+	},
+	"NoAceptar": {
+		"GetFieldBy": "id",
+		"ValueToFind": "denegar_btn"
+	},
+	"TituloOfertas": {
+		"GetFieldBy": "tagName",
+		"ValueToFind": "h1"
+	}
+}

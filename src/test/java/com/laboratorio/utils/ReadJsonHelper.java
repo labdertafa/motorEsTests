@@ -41,4 +41,9 @@ public class ReadJsonHelper {
 	public JSONObject getEntity(String element) {
 		return (JSONObject)jsonObject.get(element);
 	}
+	
+	public String getValue(String element) {
+		JSONObject entity = (JSONObject)this.jsonObject.get(element);
+		return (String)entity.get("ValueToFind");
+	}
 }

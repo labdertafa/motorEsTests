@@ -9,6 +9,8 @@ public abstract class DriverManager {
 		this.driver = null;
 	}
 	
+	protected abstract void createDriver();
+	
 	protected abstract void createDriver(String propiedad, String ruta);
 	
 	public void quitDriver() {
@@ -16,6 +18,14 @@ public abstract class DriverManager {
 			this.driver.quit();
 			this.driver = null;
 		}
+	}
+	
+	public WebDriver getDriver() {
+		if (this.driver == null) {
+			this.createDriver();
+		}
+		
+		return driver;
 	}
 	
 	public WebDriver getDriver(String propiedad, String ruta) {

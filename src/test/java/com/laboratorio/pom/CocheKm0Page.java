@@ -17,6 +17,13 @@ public class CocheKm0Page {
 	private String listaMarcas = "ListaMarcas";
 	private String selectorModelo = "SelectorModelo";
 	private String listaModelos = "ListaModelos";
+	private String precioMinimo = "PrecioMinimo";
+	private String precioMaximo = "PrecioMaximo";
+	private String anioMinimo = "AnioMinimo";
+	private String anioMaximo = "AnioMaximo";
+	private String kilometroMinimo = "KilometroMinimo";
+	private String kilometroMaximo = "KilometroMaximo";
+	private String tipoCombustible = "TipoCombustible";
 	
 	public CocheKm0Page(BasePage basePage, String filename) {
 		this.basePage = basePage;
@@ -58,5 +65,45 @@ public class CocheKm0Page {
 		if (!this.basePage.clickEnElementoDeLista(entity, modelo)) {
 			throw new Exception("El elemento indicado no existe en la lista de modelos");
 		}
+	}
+	
+	public void hacerScroll(int n) throws Exception {
+		this.basePage.waitPageLoading();
+		this.basePage.scrollDown(n);
+	}
+	
+	public void seleccionarPrecioMinimo(Integer precio) throws Exception {
+		JSONObject entity = this.jsonHelper.getEntity(this.precioMinimo);
+		this.basePage.seleccionarEnCombo(entity, precio.toString());
+	}
+	
+	public void seleccionarPrecioMaximo(Integer precio) throws Exception {
+		JSONObject entity = this.jsonHelper.getEntity(this.precioMaximo);
+		this.basePage.seleccionarEnCombo(entity, precio.toString());
+	}
+	
+	public void seleccionarAnioMinimo(Integer anio) throws Exception {
+		JSONObject entity = this.jsonHelper.getEntity(this.anioMinimo);
+		this.basePage.seleccionarEnCombo(entity, anio.toString());
+	}
+	
+	public void seleccionarAnioMaximo(Integer anio) throws Exception {
+		JSONObject entity = this.jsonHelper.getEntity(this.anioMaximo);
+		this.basePage.seleccionarEnCombo(entity, anio.toString());
+	}
+	
+	public void seleccionarKilometrajeMinimo(Integer kilometro) throws Exception {
+		JSONObject entity = this.jsonHelper.getEntity(this.kilometroMinimo);
+		this.basePage.seleccionarEnCombo(entity, kilometro.toString());
+	}
+	
+	public void seleccionarKilometrajeMaximo(Integer kilometro) throws Exception {
+		JSONObject entity = this.jsonHelper.getEntity(this.kilometroMaximo);
+		this.basePage.seleccionarEnCombo(entity, kilometro.toString());
+	}
+	
+	public void seleccionarTipoCombustible(String combustible) throws Exception {
+		JSONObject entity = this.jsonHelper.getEntity(this.tipoCombustible);
+		this.basePage.seleccionarEnComboPorTexto(entity, combustible);
 	}
 }

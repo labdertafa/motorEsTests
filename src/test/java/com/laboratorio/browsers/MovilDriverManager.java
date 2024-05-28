@@ -7,12 +7,18 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 public class MovilDriverManager extends DriverManager {
+	@Override
+	protected void createDriver() {
+		this.setDriverOptions();
+	}
 
 	@Override
 	protected void createDriver(String propiedad, String ruta) {
 		System.setProperty(propiedad, ruta);
-//		this.driver = new ChromeDriver();
-		
+		this.setDriverOptions();
+	}
+	
+	private void setDriverOptions() {
 		Map<String, Object> deviceMetrics = new HashMap<String, Object>();
 		deviceMetrics.put("width", 412);
 		deviceMetrics.put("height", 915);

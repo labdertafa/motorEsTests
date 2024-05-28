@@ -103,10 +103,7 @@ public class RentingPage {
 
 	public void confirmarOpcion() throws Exception {
 		if (Hooks.isApliMovil()) {
-			this.basePage.scrollDown();
-			this.basePage.scrollDown();
-			this.basePage.scrollDown();
-			this.basePage.scrollDown();
+			this.basePage.scrollDown(2);
 			JSONObject entity = this.jsonHelper.getEntity(this.botonNoAceptar);
 			this.basePage.click(entity);
 		}
@@ -137,7 +134,7 @@ public class RentingPage {
 		JSONObject entity;
 
 		if (!Hooks.isApliMovil()) {
-			this.basePage.scrollDown();
+			this.basePage.scrollDown(1);
 			entity = this.jsonHelper.getEntity(this.botonVerOfertas);
 		} else {
 			entity = this.jsonHelper.getEntity(this.botonVerOfertasMovil);

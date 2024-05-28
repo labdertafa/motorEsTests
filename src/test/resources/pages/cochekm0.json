@@ -22,5 +22,33 @@
 	"ListaModelos": {
 		"GetFieldBy": "id",
 		"ValueToFind": "select2-selModelo-results"
+	},
+	"PrecioMinimo": {
+		"GetFieldBy": "id",
+		"ValueToFind": "precio_min"
+	},
+	"PrecioMaximo": {
+		"GetFieldBy": "id",
+		"ValueToFind": "precio_max"
+	},
+	"AnioMinimo": {
+		"GetFieldBy": "id",
+		"ValueToFind": "year_min"
+	},
+	"AnioMaximo": {
+		"GetFieldBy": "id",
+		"ValueToFind": "year_max"
+	},
+	"KilometroMinimo": {
+		"GetFieldBy": "id",
+		"ValueToFind": "km_min"
+	},
+	"KilometroMaximo": {
+		"GetFieldBy": "id",
+		"ValueToFind": "km_max"
+	},
+	"TipoCombustible": {
+		"GetFieldBy": "id",
+		"ValueToFind": "selCombustible"
 	}
 }

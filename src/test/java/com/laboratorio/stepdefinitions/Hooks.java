@@ -9,9 +9,13 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 
+import com.laboratorio.browsers.ChromeDriverManager;
 import com.laboratorio.browsers.DriverManager;
 import com.laboratorio.browsers.DriverManagerFactory;
 import com.laboratorio.browsers.DriverType;
+import com.laboratorio.browsers.EdgeDriverManager;
+import com.laboratorio.browsers.FirefoxDriverManager;
+import com.laboratorio.browsers.MovilDriverManager;
 import com.laboratorio.utils.LogHelper;
 
 import io.cucumber.java.After;
@@ -19,6 +23,7 @@ import io.cucumber.java.AfterAll;
 import io.cucumber.java.Before;
 import io.cucumber.java.BeforeAll;
 import io.cucumber.java.Scenario;
+import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class Hooks {
 	private static final Logger logger = LogHelper.getLogger(Hooks.class);
@@ -44,6 +49,33 @@ public class Hooks {
 		return properties.getProperty("dir_definicion_paginas");
 	}
 	
+	private static void iniciarNavegador() throws Exception {
+		String navegador = properties.getProperty("navegador");
+		DriverType driverType = DriverType.valueOf(navegador);
+		
+		switch (driverType) {
+		case CHROME:
+			WebDriverManager.chromedriver().setup();
+			logger.log(Level.INFO, "Se ha seleccionado inicializado la versión actual del ChromeDriver");
+			break;
+		case FIREFOX:
+			WebDriverManager.firefoxdriver().setup();
+			logger.log(Level.INFO, "Se ha seleccionado inicializado la versión actual del GeckoDriver");
+			break;
+		case EDGE:
+			WebDriverManager.edgedriver().setup();
+			logger.log(Level.INFO, "Se ha seleccionado inicializado la versión actual del EdgeDriver");
+			break;
+		case MOVIL:
+			WebDriverManager.chromedriver().setup();
+			logger.log(Level.INFO, "Se ha seleccionado inicializado la versión actual del ChromeDriver");
+			break;
+		default:
+			logger.log(Level.SEVERE, "Se ha seleccionado un browser inválido!");
+			throw new Exception("Se ha seleccionado un browser inválido!");
+		}
+	}
+	
 	@BeforeAll
 	public static void setUpTests() {
 		logger.log(Level.INFO, "Ejecutando setUpTests()");
@@ -61,8 +93,14 @@ public class Hooks {
 			logger.log(Level.SEVERE, "Error al recuperar la configuración de las pruebas!");
 			properties = null;
 		}
+		
+		try {
+			iniciarNavegador();
+		} catch (Exception e) {
+			System.exit(-1);
+		}
 	}
-	
+
 	@AfterAll
 	public static void tearDownTests() {
 		logger.log(Level.INFO, "Ejecutando tearDownTests()");
@@ -91,7 +129,8 @@ public class Hooks {
 		String rutaDriver = properties.getProperty("ruta_driver");
 		
 		this.driverManager = DriverManagerFactory.getDriverManager(DriverType.valueOf(navegador));
-		driver = this.driverManager.getDriver(propiedad, rutaDriver);
+		// driver = this.driverManager.getDriver(propiedad, rutaDriver);
+		driver = this.driverManager.getDriver();
 		driver.get(pagina);
 		driver.manage().window().maximize();
 	}

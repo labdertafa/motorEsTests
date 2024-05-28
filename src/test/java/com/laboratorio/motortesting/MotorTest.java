@@ -13,7 +13,7 @@ import io.cucumber.junit.CucumberOptions;
 		glue = {"com.laboratorio.stepdefinitions"},
 		plugin = {"pretty", "summary", "com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:"},
 		snippets = SnippetType.CAMELCASE,
-		tags = "@movil"
+		tags = "@smoketest"
 )
 public class MotorTest {
 }

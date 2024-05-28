@@ -69,7 +69,7 @@ public class BasePage {
 	private WebElement findElement(JSONObject entity) throws Exception {
 		try {
 			By locator = this.getElement(entity);
-			
+
 			// Attendre la présence de l'élément
 			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 			wait.until(ExpectedConditions.presenceOfElementLocated(locator));
@@ -77,16 +77,16 @@ public class BasePage {
 			return driver.findElement(locator);
 		} catch (Exception e) {
 			logger.log(Level.SEVERE, "Erreur: " + e.getMessage());
-			throw new Exception(String.format("Le composant Web %s est introuvable avec le localisateur : ", entity.toString()));
+			throw new Exception(
+					String.format("Le composant Web %s est introuvable avec le localisateur : ", entity.toString()));
 		}
 	}
-	
+
 	// Esperar a que una página carque por completo
 	public void waitPageLoading() throws Exception {
 		try {
-			new WebDriverWait(driver, Duration.ofSeconds(20)).until(
-					webDriver -> ((JavascriptExecutor)webDriver).executeScript("return document.readyState").equals("complete")
-			);
+			new WebDriverWait(driver, Duration.ofSeconds(20)).until(webDriver -> ((JavascriptExecutor) webDriver)
+					.executeScript("return document.readyState").equals("complete"));
 		} catch (Exception e) {
 			logger.log(Level.SEVERE, "Erreur: " + e.getMessage());
 			throw new Exception("Error intentando consultar el status actual de la página!");
@@ -105,7 +105,7 @@ public class BasePage {
 			throw new Exception("Impossible de cliquer sur l'élément : " + element);
 		}
 	}
-	
+
 	public void clickButtonByLabel(String label) throws Exception {
 		try {
 			List<WebElement> elements = driver.findElements(By.tagName("button"));
@@ -118,29 +118,43 @@ public class BasePage {
 					return;
 				}
 			}
-			
+
 			throw new Exception(String.format("El botón con etiqueta % no se encontró en la página", label));
 		} catch (Exception e) {
 			logger.log(Level.SEVERE, "Erreur: " + e.getMessage());
 			throw new Exception("Impossible de cliquer sur l'élément avec l'étiquete : " + label);
 		}
 	}
-	
-	public void scrollDown() throws Exception {
-		try {
-			((JavascriptExecutor)driver).executeScript("scroll(0, 250);");
 
-	        // Esperar un breve momento para que la página se ajuste
-	        try {
-	            Thread.sleep(100);
-	        } catch (InterruptedException e) {
-	        }
+	public void scrollDown(int n) throws Exception {
+		try {
+			String comando = String.format("scroll(0, %d);", n * 250);
+			logger.log(Level.INFO, "Comando scroll: " + comando);
+			((JavascriptExecutor) driver).executeScript(comando);
+
+			// Esperar un breve momento para que la página se ajuste
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+			}
 		} catch (Exception e) {
 			logger.log(Level.SEVERE, "Erreur: " + e.getMessage());
 			throw new Exception("Impossible de hacer scroll down");
 		}
 	}
-	
+
+	public void ensureVisible(WebElement element) throws Exception {
+		try {
+			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", element);
+
+			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+			wait.until(ExpectedConditions.visibilityOf(element));
+
+		} catch (Exception e) {
+			logger.log(Level.SEVERE, "Erreur: " + e.getMessage());
+			throw new Exception("Impossible de hacer scroll hasta el elemento: " + element.toString());
+		}
+	}
 
 	// Vérifier si un élément s'affiche
 	public boolean isDisplayed(JSONObject element) throws Exception {
@@ -220,8 +234,36 @@ public class BasePage {
 	public void seleccionarEnCombo(JSONObject element, String valor) throws Exception {
 		try {
 			WebElement webElement = this.findElement(element);
+			try {
+				this.ensureVisible(webElement);
+			} catch (Exception e) {
+				logger.log(Level.SEVERE, "Error: " + e.getMessage());
+				throw new Exception("Problemas con el ensureVisible");
+			}
+			logger.log(Level.INFO, "EnsureVisible ejecutado con éxito!");
+			Thread.sleep(10000);
+
 			Select select = new Select(webElement);
 			select.selectByValue(valor);
+
+		} catch (Exception e) {
+			logger.log(Level.SEVERE, "Error en COMBO: " + e.getMessage());
+			throw new Exception("Combo: No se pudo seleccionar el elemento con valor: " + valor);
+		}
+	}
+
+	// Seleccionar elemento en combo
+	public void seleccionarEnComboPorTexto(JSONObject element, String valor) throws Exception {
+		try {
+			WebElement webElement = this.findElement(element);
+			try {
+				this.ensureVisible(webElement);
+			} catch (Exception e) {
+				logger.log(Level.SEVERE, "Error: " + e.getMessage());
+				throw new Exception("Problemas con el ensureVisible");
+			}
+			Select select = new Select(webElement);
+			select.selectByVisibleText(valor);
 		} catch (Exception e) {
 			logger.log(Level.SEVERE, "Error: " + e.getMessage());
 			throw new Exception("Combo: No se pudo seleccionar el elemento con valor: " + valor);
@@ -248,28 +290,19 @@ public class BasePage {
 			throw new Exception("Lista: No se pudo seleccionar el elemento con valor: " + valor);
 		}
 	}
-	
+
 	public void posicionarSlider(JSONObject elemento, int valor) throws Exception {
 		try {
 			WebElement slider = findElement(elemento);
-			
-			// Esperar que slider esté visible
-			// WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-			// wait.until(ExpectedConditions.visibilityOf(slider));
-			
-			// Actions actions = new Actions(driver);
-			// actions.dragAndDropBy(slider, posicion, 0).build().perform();
-			// logger.log(Level.INFO, "Moviendo el Slide a la posición: " + posicion);
-			
-			((JavascriptExecutor)driver).executeScript("arguments[0].value = arguments[1];", slider, valor);
+			((JavascriptExecutor) driver).executeScript("arguments[0].value = arguments[1];", slider, valor);
 		} catch (Exception e) {
 			logger.log(Level.SEVERE, "Error: " + e.getMessage());
 			throw new Exception("Lista: No se pudo posicionar el slider en el valor: " + valor);
 		}
 	}
-	
+
 	public void marcarTipoCoche(String id) throws Exception {
-        JavascriptExecutor js = (JavascriptExecutor)driver;
-        js.executeScript("document.getElementById('" + id + "').checked = true;");
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("document.getElementById('" + id + "').checked = true;");
 	}
 }
